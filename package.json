@@ -1,0 +1,8 @@
+{
+  "name": "sockets",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/codingforentrepreneurs/Websockets-from-Scratch-with-Python-JavaScript",
+  "author": "CFE <hello@teamcfe.com>",
+  "license": "MIT"
+}
