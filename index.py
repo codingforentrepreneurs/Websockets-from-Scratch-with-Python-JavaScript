@@ -1,9 +1,18 @@
 import asyncio
 import websockets
+import json
 
-async def webhook_handler(*args, **kwargs):
-    print(args, kwargs)
-    pass
+async def webhook_handler(websocket, path):
+    print(websocket, path)
+    async for message in websocket:
+        data = {}
+        try:
+            data = json.loads(message)
+        except:
+            pass
+        print(data.get('data'))
+        # print(message)
+    # pass
 
 
 server = websockets.serve(webhook_handler, 'localhost', 8765)
