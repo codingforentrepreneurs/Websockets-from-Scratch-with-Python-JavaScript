@@ -11,6 +11,7 @@ async def webhook_handler(websocket, path):
         except:
             pass
         print(data.get('data'))
+        await websocket.send(json.dumps({"this": "awesome"}))
         # print(message)
     # pass
 
