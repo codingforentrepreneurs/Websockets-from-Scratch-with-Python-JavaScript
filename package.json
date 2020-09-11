@@ -2,7 +2,15 @@
   "name": "sockets",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "start": "parcel serve index.html -d gui",
+    "build": "parcel build index.html --public-url . -d dist"
+  },
   "repository": "https://github.com/codingforentrepreneurs/Websockets-from-Scratch-with-Python-JavaScript",
   "author": "CFE <hello@teamcfe.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "sass": "^1.26.10"
+  }
 }
