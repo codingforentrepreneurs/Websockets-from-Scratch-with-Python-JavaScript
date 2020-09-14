@@ -8,6 +8,7 @@ const MyWebSocket = () => {
     const [socket, setSocket] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     const [cellData, setCellData] = useState("") // type=text, textarea
+    const [result, setResult] = useState({})
     // 1. connect to the websocket server
     // 2. push & listen for messages in the websocket connection
     // 3. disconnect from websocket server
@@ -29,6 +30,12 @@ const MyWebSocket = () => {
             }
             socket.onclose = () => {
                 setIsOpen(false)
+            }
+
+            socket.onmessage = (event) => {
+                const {data} = event
+                const msgData = JSON.parse(data)
+                setResult(msgData)
             }
         }
         return () => {
@@ -72,8 +79,12 @@ const MyWebSocket = () => {
             <button onClick={performOpen}>Open</button>
         </div>
         <div>{isOpen && 
-        
-        <textarea placeholder='Your cell data' value={cellData} name='cellData' onChange={handleInputChange} />
+            <React.Fragment>
+                <textarea placeholder='Your cell data' value={cellData} name='cellData' onChange={handleInputChange} />
+                {result.result && <div>{result.result}</div>}
+                {result.error && <div className='text-error'>{result.error}</div>}
+
+            </React.Fragment>
         
         } </div>
 

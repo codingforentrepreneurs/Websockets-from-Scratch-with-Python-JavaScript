@@ -34,6 +34,7 @@ async def websocket_handler(websocket, path):
         if cell_data != None:
             stdout, stderr = await call_cli_command(cell_data)
             print(stdout, stderr)
+            await websocket.send(json.dumps({"result": stdout, "error": stderr}))
         # await websocket.send(json.dumps({"this": "awesome"}))
         # print(message)
     # pass
