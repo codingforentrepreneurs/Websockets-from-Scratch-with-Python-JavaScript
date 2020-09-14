@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 // const socket = new WebSocket()
 
 const MyWebSocket = () => {
+    const wsURI = 'ws://localhost:8765'
     const [socket, setSocket] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     // 1. connect to the websocket server
@@ -13,7 +14,7 @@ const MyWebSocket = () => {
     useEffect(()=>{
         // connect to the websocket server
         if (socket === null) {
-            const wsURI = 'ws://localhost:8765'
+            
             setSocket(new WebSocket(wsURI))
         }
     }, [socket])
@@ -23,17 +24,37 @@ const MyWebSocket = () => {
         // connect to the websocket server
         if (socket) {
             socket.onopen = () => {
-                console.log("open")
                 setIsOpen(true)
             }
             socket.onclose = () => {
                 setIsOpen(false)
             }
         }
+        return () => {
+            if (socket) {
+                socket.close(1000, "Disconnected by dismount")
+            }
+        }
     }, [socket])
+
+    const performClose = _ => {
+        if (socket && socket.readyState == WebSocket.OPEN) {
+            socket.close(1000, "Disconnected by user")
+        }
+    }
+
+    const performOpen = _ => {
+        if (socket && socket.readyState == WebSocket.CLOSED) {
+            setSocket(new WebSocket(wsURI))
+        }
+    }
 
     return <div>
         <h1>WebSocket</h1>
+        <div>
+            <button onClick={performClose}>Close</button>
+            <button onClick={performOpen}>Open</button>
+        </div>
         <div>{isOpen && <p>Open Socket</p>} </div>
     </div>
 }
