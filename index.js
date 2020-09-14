@@ -49,6 +49,16 @@ const MyWebSocket = () => {
         }
     }
 
+    const performSend = _ => {
+        if (socket && socket.readyState == WebSocket.OPEN) {
+            const myData = {cell_data: "print(\"hello world\")"}
+            socket.send(JSON.stringify(myData))
+        } else {
+            alert("Your websocket session has closed")
+        }
+
+    }
+
     return <div>
         <h1>WebSocket</h1>
         <div>
@@ -56,6 +66,8 @@ const MyWebSocket = () => {
             <button onClick={performOpen}>Open</button>
         </div>
         <div>{isOpen && <p>Open Socket</p>} </div>
+
+        <button onClick={performSend}>Send</button>
     </div>
 }
 
