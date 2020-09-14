@@ -1,31 +1,43 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import ReactDOM from 'react-dom'
 
 
-const BtnLabel = (props) =>{
+const Timer = (props) =>{
+    const [count, setCount] = useState(-1)
+    console.log(count, props)
+    useEffect(()=>{
+        // lookup to api service
+    }, [])
 
-    return <span> - {props.count} </span>
-}
+    useEffect(()=>{
+        // console.log("mounted")
+        // setCount(count+1)
+        let myTimer;
+        if (count > 10) {
+            myTimer = setTimeout(()=>{
+                setCount(count + 1)
+            }, 1000)
+        }
 
-const Btn = (props) =>{
-    const [clickCount, setClickCount] = useState(0)
-    console.log(props)
-    const shouldRenderCount = props.renderCount === true ? true : false
-    const renderCountLabel = shouldRenderCount === true ? <BtnLabel count={clickCount} /> : null
-    const handleClick = (event) =>{
-        // alert("btn in react")
-        setClickCount(clickCount + 1)
+        return () => {
+            clearTimeout(myTimer)
+        }
+    }, [count])
+
+    const handleClick = _ => {
+        setCount(count + 1)
     }
-    return <button onClick={handleClick} className={`class-${clickCount}`}>hello react btn {renderCountLabel}</button>
+
+    return <div>
+
+        <h1>Timer - {count}</h1>
+        <button onClick={handleClick}>Reset</button>
+    </div>
 }
 
 const App = () => {
     return <div>Hello world again.
-        
-       <p> <Btn renderCount /></p>
-       <p> <Btn /></p>
-       <p> <Btn /></p>
-       <p> <Btn /></p>
+            <Timer className='my-timer' />
     </div>
 }
 
