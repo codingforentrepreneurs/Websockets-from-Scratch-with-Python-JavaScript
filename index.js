@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom'
 
 // const socket = new WebSocket()
 
-const MyWebSocket = () => {
-    const wsURI = 'ws://localhost:8765'
+const MyWebSocket = (props) => {
+    
+    const {uri} = props
     const [socket, setSocket] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
     const [cellData, setCellData] = useState("") // type=text, textarea
@@ -17,7 +18,7 @@ const MyWebSocket = () => {
         // connect to the websocket server
         if (socket === null) {
             
-            setSocket(new WebSocket(wsURI))
+            setSocket(new WebSocket(uri))
         }
     }, [socket])
 
@@ -36,6 +37,9 @@ const MyWebSocket = () => {
                 const {data} = event
                 const msgData = JSON.parse(data)
                 setResult(msgData)
+                if (props.callback) {
+                    props.callback(msgData)
+                }
             }
         }
         return () => {
@@ -53,7 +57,7 @@ const MyWebSocket = () => {
 
     const performOpen = _ => {
         if (socket && socket.readyState == WebSocket.CLOSED) {
-            setSocket(new WebSocket(wsURI))
+            setSocket(new WebSocket(uri))
         }
     }
 
@@ -81,7 +85,7 @@ const MyWebSocket = () => {
         <div>{isOpen && 
             <React.Fragment>
                 <textarea placeholder='Your cell data' value={cellData} name='cellData' onChange={handleInputChange} />
-                {result.result && <div>{result.result}</div>}
+                {result.result && <div className='display-result-linebreak'>{result.result}</div>}
                 {result.error && <div className='text-error'>{result.error}</div>}
 
             </React.Fragment>
@@ -94,9 +98,13 @@ const MyWebSocket = () => {
 
 
 const App = () => {
+    const wsURI = 'ws://localhost:8765'
+    const handleCallback = (event) => {
+        console.log(event)
+    }
     return <div>App
 
-        <MyWebSocket />
+        <MyWebSocket uri={wsURI} callback={handleCallback}/>
             
     </div>
 }
