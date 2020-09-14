@@ -7,6 +7,7 @@ const MyWebSocket = () => {
     const wsURI = 'ws://localhost:8765'
     const [socket, setSocket] = useState(null)
     const [isOpen, setIsOpen] = useState(false)
+    const [cellData, setCellData] = useState("") // type=text, textarea
     // 1. connect to the websocket server
     // 2. push & listen for messages in the websocket connection
     // 3. disconnect from websocket server
@@ -51,13 +52,18 @@ const MyWebSocket = () => {
 
     const performSend = _ => {
         if (socket && socket.readyState == WebSocket.OPEN) {
-            const myData = {cell_data: "print(\"hello world\")"}
+            const myData = {cell_data: cellData}
             socket.send(JSON.stringify(myData))
+            setCellData("")
         } else {
             alert("Your websocket session has closed")
         }
-
     }
+
+    const handleInputChange = (event) => {
+        const val = event.target.value
+        setCellData(val)
+    } 
 
     return <div>
         <h1>WebSocket</h1>
@@ -65,7 +71,11 @@ const MyWebSocket = () => {
             <button onClick={performClose}>Close</button>
             <button onClick={performOpen}>Open</button>
         </div>
-        <div>{isOpen && <p>Open Socket</p>} </div>
+        <div>{isOpen && 
+        
+        <textarea placeholder='Your cell data' value={cellData} name='cellData' onChange={handleInputChange} />
+        
+        } </div>
 
         <button onClick={performSend}>Send</button>
     </div>
